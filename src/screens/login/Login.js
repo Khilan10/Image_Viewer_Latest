@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
-import Header from '../../common/header/Header';
+import '../../common/Header.css';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -56,8 +56,11 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <Header>
-                </Header>
+                <header className="app-header">
+                    <div className="header-heading">
+                        Image Viewer
+            </div>
+                </header>
                 <Card className="card">
                     <CardContent style={{ padding: '10%', width: '100%' }}>
                         <FormControl>
