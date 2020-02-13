@@ -1,0 +1,10 @@
+.app-header {
+  height: 42px;
+  background-color: #263238;
+}
+.header-heading {
+  height: 18px;
+  color: #fff;
+  float: left;
+  margin: 12px 12px;
+}
