@@ -52,3 +52,6 @@
 .dispBlock {
   display: block;
 }
+.bold {
+  font-weight: bolder;
+}
