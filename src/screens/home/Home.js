@@ -61,6 +61,7 @@ class Home extends Component {
 
     render() {
         let pdata = this.state.postData;
+        let i = 0;
         return (
             <div >
                 <header className="app-header">
@@ -78,10 +79,10 @@ class Home extends Component {
                     </div>
                 </header>
                 <div className="main-content">
-                    <GridList cellHeight={Card} cellWidth={"auto"} cellHeight={"auto"} cols={2}>
+                    <GridList cellHeight={"auto"} cols={2}>
                         {pdata.data != null && pdata.data.map(data => (
-                            <GridListTile key={data.caption.id} >
-                                <Card variant="outlined" className="post-card">
+                            <GridListTile key={"grid" + data.caption.id} >
+                                <Card variant="outlined" className="post-card" key={"card" + data.caption.id}>
                                     <CardHeader
                                         avatar={
                                             <Avatar alt={data.user.username} src={data.user.profile_picture} >
@@ -90,14 +91,14 @@ class Home extends Component {
                                         title={data.user.username}
                                         subheader={new Date(data.created_time).toDateString()} />
                                     <CardContent>
-                                        <img src={data.images.standard_resolution.url} width="640" />
+                                        <img src={data.images.standard_resolution.url} width="640" alt={data.caption.text.split("#")[0]} />
                                         <hr />
                                         <Typography variant="body2">
                                             {data.caption.text.split("#")[0]}
                                         </Typography>
                                         <Typography variant="body2" className="hash-tag">
                                             {data.tags != null && data.tags.map(tag => (
-                                                <span className="tag-space">
+                                                <span className="tag-space" key={tag}>
                                                     #{tag}
                                                 </span>
 
@@ -107,10 +108,12 @@ class Home extends Component {
                                             <FavoriteBorderIcon />
                                             <span className="like-count">{data.likes.count} Likes</span>
                                         </div>
+                                        <br /><br />
                                         <FormControl>
                                             <span >
                                                 <InputLabel htmlFor="comment" className="lable">Add a comment</InputLabel>
-                                                <Input id="comment" type="text" className="lable" />
+                                                <Input id={"comment" + i++}
+                                                    type="text" className="lable" />
                                                 <Button variant="contained" color="primary"><Typography variant="subtitle1">ADD</Typography></Button>
                                             </span>
                                         </FormControl>
