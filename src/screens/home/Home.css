@@ -45,5 +45,10 @@
   width: 500px;
   margin-right: 20px;
 }
-.add-button {
+.dispNone {
+  display: none;
+}
+
+.dispBlock {
+  display: block;
 }

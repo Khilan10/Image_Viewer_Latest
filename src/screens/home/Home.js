@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
@@ -22,7 +23,9 @@ class Home extends Component {
         super();
         this.state = {
             data: [],
-            postData: []
+            postData: [],
+            like: [],
+            liked: []
         }
     }
 
@@ -50,6 +53,21 @@ class Home extends Component {
                 that.setState({
                     postData: JSON.parse(this.responseText)
                 })
+                let length = that.state.postData.data.length;
+                let initialLike = []
+                for (var i = 0; i < length; i++) {
+                    initialLike.push("dispBlock");
+                }
+                that.setState({
+                    like: initialLike
+                })
+                let initialLiked = []
+                for (var j = 0; j < length; j++) {
+                    initialLiked.push("dispNone");
+                }
+                that.setState({
+                    liked: initialLiked
+                })
                 console.log("checking post data" + JSON.stringify(that.state.postData.data[0].user.id))
                 console.log("checking post data" + JSON.stringify(that.state.postData))
             }
@@ -59,9 +77,33 @@ class Home extends Component {
 
     }
 
+    likeClickHandler = (index) => {
+        let updatedPostData = this.state.postData;
+        updatedPostData.data[index].likes.count = updatedPostData.data[index].likes.count + 1;
+        this.setState({ postData: updatedPostData });
+        let updateLiked = this.state.liked;
+        updateLiked[index] = "dispBlock";
+        this.setState({ liked: updateLiked })
+        let updateLike = this.state.like;
+        updateLike[index] = "dispNone";
+        this.setState({ like: updateLike });
+
+    }
+
+    unlikeClickHandler = (index) => {
+        let updatedPostData = this.state.postData;
+        updatedPostData.data[index].likes.count = updatedPostData.data[index].likes.count - 1;
+        this.setState({ postData: updatedPostData });
+        let updateLike = this.state.like;
+        updateLike[index] = "dispBlock";
+        this.setState({ like: updateLike });
+        let updateLiked = this.state.liked;
+        updateLiked[index] = "dispNone";
+        this.setState({ liked: updateLiked })
+    }
+
     render() {
         let pdata = this.state.postData;
-        let i = 0;
         return (
             <div >
                 <header className="app-header">
@@ -80,7 +122,7 @@ class Home extends Component {
                 </header>
                 <div className="main-content">
                     <GridList cellHeight={"auto"} cols={2}>
-                        {pdata.data != null && pdata.data.map(data => (
+                        {pdata.data != null && pdata.data.map((data, index) => (
                             <GridListTile key={"grid" + data.caption.id} >
                                 <Card variant="outlined" className="post-card" key={"card" + data.caption.id}>
                                     <CardHeader
@@ -105,14 +147,19 @@ class Home extends Component {
                                             ))}
                                         </Typography>
                                         <div className="likes">
-                                            <FavoriteBorderIcon />
-                                            <span className="like-count">{data.likes.count} Likes</span>
+                                            <span className={this.state.like[index]}>
+                                                <FavoriteBorderIcon id={"notlike" + data.caption.id} onClick={() => this.likeClickHandler(index)} />
+                                            </span>
+                                            <span className={this.state.liked[index]}>
+                                                <FavoriteIcon style={{ color: "red" }} id={"liked" + data.caption.id} onClick={() => this.unlikeClickHandler(index)} />
+                                            </span>
+                                            <span className="like-count">{data.likes.count} likes</span>
                                         </div>
                                         <br /><br />
                                         <FormControl>
                                             <span >
                                                 <InputLabel htmlFor="comment" className="lable">Add a comment</InputLabel>
-                                                <Input id={"comment" + i++}
+                                                <Input id={"comment" + index}
                                                     type="text" className="lable" />
                                                 <Button variant="contained" color="primary"><Typography variant="subtitle1">ADD</Typography></Button>
                                             </span>
