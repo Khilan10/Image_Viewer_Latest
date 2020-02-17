@@ -17,6 +17,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+
 
 class Profile extends Component {
 
@@ -33,7 +36,8 @@ class Profile extends Component {
             openModal: false,
             requiredUsername: 'dispNone',
             fullName: '',
-            fullNameEdit: ''
+            fullNameEdit: '',
+            postData: []
         }
     }
 
@@ -64,6 +68,19 @@ class Profile extends Component {
         });
         xhrData.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
         xhrData.send(data);
+
+        //Get the post data
+        let xhrPostData = new XMLHttpRequest();
+        let postData = null;
+        xhrPostData.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    postData: JSON.parse(this.responseText)
+                })
+            }
+        })
+        xhrPostData.open("GET", "https://api.instagram.com/v1/users/self/media/recent?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
+        xhrPostData.send(postData);
 
     }
 
@@ -144,8 +161,7 @@ class Profile extends Component {
 
 
     render() {
-
-        let pdata = this.state.loggedInUserData;
+        let pdata = this.state.postData;
         const id = this.state.open ? "simple-popper" : null;
         return (
             <div>
@@ -218,6 +234,15 @@ class Profile extends Component {
                             </Card>
                         </ClickAwayListener>
                     </Modal>
+                </div>
+                <div className="image-post">
+                    <GridList cellHeight={300} cols={3}>
+                        {pdata.data != null && pdata.data.map((tile) => (
+                            <GridListTile key={tile.caption.id} cols={tile.cols || 1}>
+                                <img src={tile.images.standard_resolution.url} alt={tile.caption.id} />
+                            </GridListTile>
+                        ))}
+                    </GridList>
                 </div>
             </div >
 

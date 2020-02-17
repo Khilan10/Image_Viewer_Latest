@@ -51,3 +51,8 @@
 .dispBlock {
   display: block;
 }
+.image-post {
+  margin-top: 40px;
+  margin-right: 10%;
+  margin-left: 10%;
+}
