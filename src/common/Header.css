@@ -1,10 +1,15 @@
 .app-header {
-  height: 42px;
+  height: 56px;
   background-color: #263238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 }
 .header-heading {
   height: 18px;
+  display: flex;
   color: #fff;
-  float: left;
-  margin: 12px 12px;
+  margin-left: 10px;
+  align-items: center;
 }
