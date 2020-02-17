@@ -55,6 +55,23 @@ class Profile extends Component {
         }
     }
 
+    logoutClickHandler = (event) => {
+        if (this.state.open === true) {
+            this.setState({ open: false })
+        } else {
+            this.setState({ open: true })
+        }
+        if (this.state.ancherEl === null) {
+            this.setState({ anchorEl: event.currentTarget });
+        } else {
+            this.setState({ anchorEl: null })
+        }
+        sessionStorage.removeItem("access-token");
+        this.props.history.push({
+            pathname: '/'
+        })
+    }
+
     render() {
         const id = this.state.open ? "simple-popper" : null;
         return (
