@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import EditIcon from '@material-ui/icons/EditRounded';
 
 class Profile extends Component {
 
@@ -15,6 +16,9 @@ class Profile extends Component {
         super();
         this.state = {
             loggedInUserData: [],
+            numberOfPosts: 0,
+            follows: 0,
+            followedBy: 0,
             dispMenu: 'dispNone',
             open: false,
             anchorEl: null
@@ -29,12 +33,23 @@ class Profile extends Component {
         xhrData.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    loggedInUserData: JSON.parse(this.response).data
+                    loggedInUserData: JSON.parse(this.responseText).data
                 });
+                console.log("checking state" + that.state.loggedInUserData);
+                that.setState({
+                    numberOfPosts: that.state.loggedInUserData.counts.media
+                })
+                that.setState({
+                    follows: that.state.loggedInUserData.counts.follows
+                })
+                that.setState({
+                    followedBy: that.state.loggedInUserData.counts.followed_by
+                })
             }
         });
         xhrData.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
         xhrData.send(data);
+
     }
 
     profileClickHandler = (event) => {
@@ -79,6 +94,8 @@ class Profile extends Component {
     }
 
     render() {
+
+        let pdata = this.state.loggedInUserData;
         const id = this.state.open ? "simple-popper" : null;
         return (
             <div>
@@ -109,7 +126,25 @@ class Profile extends Component {
                         </div>
                     </div>
                 </header>
-                <div>I am in Profile Page</div>
+                <div className="information-section">
+                    <div className="profile-image">
+                        <img src={this.state.loggedInUserData.profile_picture} alt={this.state.loggedInUserData.username} height="50px" width="50px" className="circle" />
+                    </div>
+                    <div className="right-information">
+                        <span className="user-name">{this.state.loggedInUserData.username}</span>
+                        <div className="display-row">
+                            <span className="small">Posts: {this.state.numberOfPosts}</span>
+                            <span className="small">Follows: {this.state.follows}</span>
+                            <span className="small">Followed By: {this.state.followedBy}</span>
+                        </div>
+                        <div className="full-name">
+                            <span className="full-name-size">{this.state.loggedInUserData.full_name}</span>
+                            <IconButton style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: '#f50057' }}  >
+                                <EditIcon variant='fab' style={{ color: 'white', fontSize: '12px' }} />
+                            </IconButton>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         )

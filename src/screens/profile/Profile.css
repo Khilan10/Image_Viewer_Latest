@@ -1,0 +1,35 @@
+.information-section {
+  margin-left: 35%;
+  display: flex;
+  flex-wrap: nowrap;
+  height: 70px;
+  margin-top: 20px;
+}
+.user-name {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.right-information {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+  padding: 0;
+  height: 50px;
+}
+.display-row {
+  display: flex;
+  flex-direction: row;
+}
+.full-name {
+  display: flex;
+  flex-direction: row;
+}
+.small {
+  font-size: 9px;
+  margin-right: 20px;
+  margin-bottom: 5px;
+}
+.full-name-size {
+  font-size: 11px;
+  margin-right: 10px;
+}
