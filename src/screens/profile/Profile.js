@@ -9,6 +9,14 @@ import MenuList from '@material-ui/core/MenuList';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/EditRounded';
+import Modal from '@material-ui/core/Modal';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Button from '@material-ui/core/Button';
 
 class Profile extends Component {
 
@@ -21,7 +29,9 @@ class Profile extends Component {
             followedBy: 0,
             dispMenu: 'dispNone',
             open: false,
-            anchorEl: null
+            anchorEl: null,
+            openModal: false,
+            requiredUsername: 'dispNone'
         }
     }
 
@@ -93,6 +103,20 @@ class Profile extends Component {
         })
     }
 
+    openEditModalHandler = () => {
+        if (this.state.openModal === true) {
+            this.setState({ openModal: false })
+        } else {
+            this.setState({ openModal: true })
+        }
+    }
+
+    closeEditModalHandler = () => {
+        if (this.state.openModal === true) {
+            this.setState({ openModal: false })
+        }
+    }
+
     render() {
 
         let pdata = this.state.loggedInUserData;
@@ -139,13 +163,37 @@ class Profile extends Component {
                         </div>
                         <div className="full-name">
                             <span className="full-name-size">{this.state.loggedInUserData.full_name}</span>
-                            <IconButton style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: '#f50057' }}  >
+                            <IconButton style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: '#f50057' }} onClick={() => { this.openEditModalHandler() }} >
                                 <EditIcon variant='fab' style={{ color: 'white', fontSize: '12px' }} />
                             </IconButton>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div>
+                    <Modal open={this.state.openModal} className="edit-modal" paperprops={{ tabIndex: -1 }} >
+                        <ClickAwayListener onClickAway={() => { this.closeEditModalHandler() }} >
+                            <Card tabIndex={-1}>
+                                <CardContent>
+                                    <FormControl>
+                                        <Typography variant="h4">EDIT</Typography>
+                                    </FormControl>
+                                    <br /><br /><br />
+                                    <FormControl fullWidth required>
+                                        <InputLabel htmlFor="fullnameEdit">Full Name</InputLabel>
+                                        <Input id="fullnameEdit" type="test" onChange={this.inputFullNameChangeHandler} />
+                                        <FormHelperText className={this.state.requiredUsername}>
+                                            <span className="red">required</span>
+                                        </FormHelperText>
+                                    </FormControl>
+                                    <br /><br />
+                                    <Button variant="contained" color="primary" onClick={this.updateClickHandler}>Update</Button>
+                                    <br /><br />
+                                </CardContent>
+                            </Card>
+                        </ClickAwayListener>
+                    </Modal>
+                </div>
+            </div >
 
         )
     }

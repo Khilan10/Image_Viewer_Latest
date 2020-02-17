@@ -33,3 +33,21 @@
   font-size: 11px;
   margin-right: 10px;
 }
+.edit-modal {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  margin-top: 170px;
+  width: 300px;
+  padding: 10px;
+  margin-left: 40%;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+.dispNone {
+  display: none;
+}
+.dispBlock {
+  display: block;
+}
