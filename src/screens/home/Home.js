@@ -17,6 +17,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 
 class Home extends Component {
 
@@ -31,9 +36,13 @@ class Home extends Component {
             isCommentAdded: [],
             commentAdded: [],
             comment: [],
-            commentRequired: []
+            commentRequired: [],
+            dispMenu: 'dispNone',
+            open: false,
+            anchorEl: null
         }
     }
+
 
     componentWillMount() {
         // Get logged in person data
@@ -157,11 +166,11 @@ class Home extends Component {
             this.setState({ commentRequired: commentRequiredUpdate });
         }
         else {
-            let length = this.state.postData.data.length;
+            //let length = this.state.postData.data.length;
             let commentRequiredUpdate = this.state.commentRequired;
             let isCommentAddedUpdate = this.state.isCommentAdded;
             let commentUpdate = this.state.commentAdded;
-            let commentAddedUpdate = this.state.commentAdded;
+            //let commentAddedUpdate = this.state.commentAdded;
             commentRequiredUpdate[index] = "dispNone";
             isCommentAddedUpdate[index] = "dispBlock"
             this.setState({ commentRequired: commentRequiredUpdate });
@@ -175,8 +184,57 @@ class Home extends Component {
 
     }
 
+    profileClickHandler = (event) => {
+        if (this.state.dispMenu === "dispNone") {
+            this.setState({ dispMenu: "dispBlock" })
+        } else {
+            this.setState({ dispMenu: "dispNone" })
+        }
+        if (this.state.open === true) {
+            this.setState({ open: false })
+        } else {
+            this.setState({ open: true })
+        }
+        if (this.state.ancherEl === null) {
+            this.setState({ anchorEl: event.currentTarget });
+        } else {
+            this.setState({ anchorEl: null })
+        }
+    }
+
+    logoutClickHandler = (event) => {
+        if (this.state.open === true) {
+            this.setState({ open: false })
+        } else {
+            this.setState({ open: true })
+        }
+        if (this.state.ancherEl === null) {
+            this.setState({ anchorEl: event.currentTarget });
+        } else {
+            this.setState({ anchorEl: null })
+        }
+        sessionStorage.removeItem("access-token");
+        this.props.history.push({
+            pathname: '/'
+        })
+    }
+
+    myAccountClickHandler = (event) => {
+        if (this.state.open === true) {
+            this.setState({ open: false })
+        } else {
+            this.setState({ open: true })
+        }
+        if (this.state.ancherEl === null) {
+            this.setState({ anchorEl: event.currentTarget });
+        } else {
+            this.setState({ anchorEl: null })
+        }
+    }
+
     render() {
         let pdata = this.state.postData;
+        const id = this.state.open ? "simple-popper" : null;
         return (
             <div >
                 <header className="app-header">
@@ -191,10 +249,28 @@ class Home extends Component {
                             }} disableUnderline className="input-box" />
                         </div>
                         <div className="icon-button">
-                            <IconButton className="circle"><img src={this.state.data.profile_picture} alt={this.state.data.username} height="36" width="36" className="circle" /></IconButton>
+                            <IconButton className="circle" onClick={(event) => {
+                                this.profileClickHandler(event)
+                            }}><img src={this.state.data.profile_picture} alt={this.state.data.username} height="36" width="36" className="circle" /></IconButton>
+                            <Popper id={id}
+                                open={this.state.open} anchorEl={this.state.anchorEl}
+                                transition>
+                                <ClickAwayListener onClickAway={(event) => { this.profileClickHandler(event) }}>
+                                    <Paper className={this.state.dispMenu} style={{
+                                        marginTop: '50px', marginLeft: '1240px', width: '140px'
+                                    }}>
+                                        <MenuList className="dropdown-content" style={{ paddingRight: '20px', paddingLeft: '20px' }}>
+                                            <MenuItem onClick={(event) => { this.myAccountClickHandler() }} > <Typography variant="h6" ><span className="bold">My Account</span></Typography></MenuItem>
+                                            <hr />
+                                            <MenuItem onClick={(event) => { this.logoutClickHandler() }} > <Typography variant="h6" ><span className="bold">Logout</span></Typography></MenuItem>
+                                        </MenuList>
+                                    </Paper>
+                                </ClickAwayListener>
+                            </Popper>
                         </div>
                     </div>
                 </header>
+
                 <div className="main-content">
                     <GridList cellHeight={"auto"} cols={2}>
                         {pdata.data != null && pdata.data.map((data, index) => (
