@@ -72,14 +72,22 @@ class Profile extends Component {
         })
     }
 
+    logoClickHandler = () => {
+        this.props.history.push({
+            pathname: '/home/'
+        })
+    }
+
     render() {
         const id = this.state.open ? "simple-popper" : null;
         return (
             <div>
                 <header className="app-header">
                     <div className="header-heading">
-                        Image Viewer
-            </div>
+                        <span onClick={() => {
+                            this.logoClickHandler()
+                        }}>Image Viewer</span>
+                    </div>
                     <div className="header-right-content">
                         <div className="icon-button">
                             <IconButton className="circle" onClick={(event) => {
