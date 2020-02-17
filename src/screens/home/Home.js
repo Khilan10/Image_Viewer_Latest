@@ -230,6 +230,9 @@ class Home extends Component {
         } else {
             this.setState({ anchorEl: null })
         }
+        this.props.history.push({
+            pathname: '/profile/'
+        })
     }
 
     render() {
