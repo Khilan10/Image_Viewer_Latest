@@ -31,7 +31,9 @@ class Profile extends Component {
             open: false,
             anchorEl: null,
             openModal: false,
-            requiredUsername: 'dispNone'
+            requiredUsername: 'dispNone',
+            fullName: '',
+            fullNameEdit: ''
         }
     }
 
@@ -54,6 +56,9 @@ class Profile extends Component {
                 })
                 that.setState({
                     followedBy: that.state.loggedInUserData.counts.followed_by
+                })
+                that.setState({
+                    fullName: that.state.loggedInUserData.full_name
                 })
             }
         });
@@ -115,7 +120,28 @@ class Profile extends Component {
         if (this.state.openModal === true) {
             this.setState({ openModal: false })
         }
+        this.setState({ requiredUsername: 'dispNone' })
     }
+
+    inputFullNameChangeHandler = (event) => {
+        let NameEdit = event.target.value
+        this.setState({ fullNameEdit: NameEdit })
+    }
+
+    updateClickHandler = () => {
+        let NameEdit = this.state.fullNameEdit;
+        console.log("checking full name edit:" + NameEdit);
+        if (NameEdit !== '') {
+            this.setState({ fullName: NameEdit })
+            this.setState({ requiredUsername: 'dispNone' })
+            this.setState({ fullNameEdit: '' })
+            this.setState({ openModal: false })
+        } else {
+            this.setState({ requiredUsername: 'dispBlock' })
+            this.setState({ fullNameEdit: '' })
+        }
+    }
+
 
     render() {
 
@@ -162,7 +188,7 @@ class Profile extends Component {
                             <span className="small">Followed By: {this.state.followedBy}</span>
                         </div>
                         <div className="full-name">
-                            <span className="full-name-size">{this.state.loggedInUserData.full_name}</span>
+                            <span className="full-name-size">{this.state.fullName}</span>
                             <IconButton style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: '#f50057' }} onClick={() => { this.openEditModalHandler() }} >
                                 <EditIcon variant='fab' style={{ color: 'white', fontSize: '12px' }} />
                             </IconButton>
@@ -180,7 +206,7 @@ class Profile extends Component {
                                     <br /><br /><br />
                                     <FormControl fullWidth required>
                                         <InputLabel htmlFor="fullnameEdit">Full Name</InputLabel>
-                                        <Input id="fullnameEdit" type="test" onChange={this.inputFullNameChangeHandler} />
+                                        <Input id="fullnameEdit" type="test" onChange={this.inputFullNameChangeHandler} name="fufullnameEdit" />
                                         <FormHelperText className={this.state.requiredUsername}>
                                             <span className="red">required</span>
                                         </FormHelperText>
