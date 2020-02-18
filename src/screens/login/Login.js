@@ -79,7 +79,7 @@ class Login extends Component {
                             <InputLabel htmlFor="username">Username</InputLabel>
                             <Input id="username" type="text" username={this.state.usernameTyped} onChange={this.inputUsernameChangeHandler} />
                             <FormHelperText className={this.state.usernameRequired} >
-                                <span className="red"><Typography variant="subtitle1">required</Typography></span>
+                                <span className="red">required</span>
                             </FormHelperText>
                         </FormControl>
                         <br /><br />
@@ -87,18 +87,18 @@ class Login extends Component {
                             <InputLabel htmlFor="password">Password</InputLabel>
                             <Input id="password" type="password" password={this.state.passwordTyped} onChange={this.inputPasswordChangeHandler} />
                             <FormHelperText className={this.state.passwordRequired}>
-                                <span className="red"><Typography variant="subtitle1">required</Typography></span>
+                                <span className="red">required</span>
                             </FormHelperText>
                         </FormControl>
                         <br /><br />
                         <FormControl>
                             <FormHelperText className={this.state.loginFailed}>
-                                <span className="red"><Typography variant="subtitle1">Incorrect username and/or password</Typography></span>
+                                <span className="red">Incorrect username and/or password</span>
                                 <br />
                             </FormHelperText>
                         </FormControl>
                         <br />
-                        <Button variant="contained" color="primary" onClick={this.loginClickHandler}><Typography variant="subtitle1">LOGIN</Typography></Button>
+                        <Button variant="contained" color="primary" onClick={this.loginClickHandler}><span className="login-button">LOGIN</span></Button>
                         <br /><br /><br />
                     </CardContent>
                 </Card>
