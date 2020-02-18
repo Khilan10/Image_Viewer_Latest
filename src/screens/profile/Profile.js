@@ -350,17 +350,6 @@ class Profile extends Component {
                 commentRequiredModal: commentRequiredModalEdit
             })
         }
-        // if (this.state.userCommentModal[index] !== '') {
-        //     displayUserCommentModalEdit[index] = "dispBlock";
-        //     this.setState({
-        //         displayUserCommentModal: displayUserCommentModalEdit
-        //     })
-        // } else {
-        //     displayUserCommentModalEdit[index] = "dispNone";
-        //     this.setState({
-        //         displayUserCommentModal: displayUserCommentModalEdit
-        //     })
-        // }
         let userCommentModalCopyDefault = [];
         for (var m = 0; m < len; m++) {
             userCommentModalCopyDefault[m] = ''

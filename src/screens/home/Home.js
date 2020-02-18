@@ -138,6 +138,7 @@ class Home extends Component {
         updateLike[index] = "dispNone";
         this.setState({ like: updateLike });
 
+
     }
 
     unlikeClickHandler = (index) => {
@@ -152,35 +153,59 @@ class Home extends Component {
         this.setState({ liked: updateLiked })
     }
 
-    inputCommentChangeHandler = (e, index) => {
-        let commentAddedUpdate = this.state.commentAdded;
-        commentAddedUpdate[index] = e;
-        this.setState({ commentAdded: commentAddedUpdate });
+    inputCommentChangeHandler = (value, index) => {
+
+        let commentAddedUpdate = [];
+        let len = this.state.postData.data.length;
+        for (var k = 0; k < len; k++) {
+            commentAddedUpdate[k] = this.state.comment[k]
+        }
+        commentAddedUpdate[index] = value;
+        console.log("comment reading" + commentAddedUpdate[index])
+        this.setState({
+            commentAdded: commentAddedUpdate
+        })
     }
 
     addCommentClickHandler = (index) => {
-        console.log("add commenthandler called for :" + index)
-        if (this.state.commentAdded[index] === '' || this.state.commentAdded[index] === null) {
-            let commentRequiredUpdate = this.state.commentRequired;
-            commentRequiredUpdate[index] = "dispBlock";
-            this.setState({ commentRequired: commentRequiredUpdate });
+
+        let commentRequiredEdit = [];
+        let CommentEdit = [];
+        let isCommentAddedEdit = [];
+        let len = this.state.postData.data.length;
+        for (var l = 0; l < len; l++) {
+            commentRequiredEdit[l] = "dispNone";
+            CommentEdit[l] = this.state.comment[l];
+            isCommentAddedEdit[l] = this.state.isCommentAdded[l];
         }
-        else {
-            //let length = this.state.postData.data.length;
-            let commentRequiredUpdate = this.state.commentRequired;
-            let isCommentAddedUpdate = this.state.isCommentAdded;
-            let commentUpdate = this.state.commentAdded;
-            //let commentAddedUpdate = this.state.commentAdded;
-            commentRequiredUpdate[index] = "dispNone";
-            isCommentAddedUpdate[index] = "dispBlock"
-            this.setState({ commentRequired: commentRequiredUpdate });
-            this.setState({ isCommentAdded: isCommentAddedUpdate });
-            this.setState({ comment: commentUpdate })
-            // for (var i = 0; i < length; i++) {
-            //     commentAddedUpdate.push('');
-            // }
-            // this.setState({ commentAdded: commentAddedUpdate });
+        let id = "comment" + index;
+        if (this.state.commentAdded[index] !== '') {
+            isCommentAddedEdit[index] = "dispNone";
+            CommentEdit[index] = this.state.commentAdded[index];
+            this.setState({
+                isCommentAddedEdit: isCommentAddedEdit
+            })
+            this.setState({
+                comment: CommentEdit
+            })
+            isCommentAddedEdit[index] = "dispBlock";
+            this.setState({
+                isCommentAdded: isCommentAddedEdit
+            })
+        } else {
+            commentRequiredEdit[index] = "dispBlock"
+            this.setState({
+                commentRequired: commentRequiredEdit
+            })
         }
+        let commentAddedDefault = [];
+        for (var m = 0; m < len; m++) {
+            commentAddedDefault[m] = ''
+        }
+        this.setState({
+            commentAdded: commentAddedDefault
+        })
+        document.getElementById(id).value = '';
 
     }
 
