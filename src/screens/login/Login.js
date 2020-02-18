@@ -10,8 +10,9 @@ import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 
-//https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784
-
+//dummy password and username is upgrad
+//to login in application please login with:
+// upgrad as username and upgrade as password
 class Login extends Component {
 
     constructor() {
@@ -28,14 +29,21 @@ class Login extends Component {
         }
     }
 
+    //this is called on change of username
     inputUsernameChangeHandler = (e) => {
         this.setState({ usernameTyped: e.target.value });
     }
 
+    //this method is called on click of password
     inputPasswordChangeHandler = (e) => {
         this.setState({ passwordTyped: e.target.value });
     }
 
+    //this method is called on click of login button
+    //this will set the acces Token in the sesson storage
+    //For checking the username and password are correct they are check
+    //against the dummy password and username
+    //this will route the page to Home page
     loginClickHandler = () => {
         this.state.usernameTyped === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
         this.state.passwordTyped === "" ? this.setState({ passwordRequired: "dispBlock" }) : this.setState({ passwordRequired: "dispNone" });
