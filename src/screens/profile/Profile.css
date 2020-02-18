@@ -1,0 +1,108 @@
+.information-section {
+  margin-left: 35%;
+  display: flex;
+  flex-wrap: nowrap;
+  height: 70px;
+  margin-top: 20px;
+}
+.user-name {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.right-information {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+  padding: 0;
+  height: 50px;
+}
+.display-row {
+  display: flex;
+  flex-direction: row;
+}
+.full-name {
+  display: flex;
+  flex-direction: row;
+}
+.small {
+  font-size: 9px;
+  margin-right: 20px;
+  margin-bottom: 5px;
+}
+.full-name-size {
+  font-size: 11px;
+  margin-right: 10px;
+}
+.edit-modal {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  margin-top: 170px;
+  width: 300px;
+  padding: 10px;
+  margin-left: 40%;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+.dispNone {
+  display: none;
+}
+.dispBlock {
+  display: block;
+}
+.image-post {
+  margin-top: 40px;
+  margin-right: 8%;
+  margin-left: 8%;
+}
+.image-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.post-card-content-profile {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  padding: 20px;
+}
+.post-content-right-profile {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.post-card-profile {
+  display: flex;
+}
+.post-content-right-profile-header {
+  display: flex;
+  flex-direction: row;
+}
+.avtar-profile {
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.tag-space-profile {
+  color: #42a5f5;
+}
+.like-profile {
+  display: flex;
+  flex-direction: row;
+  margin-top: 360px;
+}
+.form-control-modal {
+  display: flex;
+  flex-direction: row;
+}
+.form-control-modal-column {
+  display: flex;
+  flex-direction: column;
+}
+.bold {
+  font-weight: bolder;
+}
+.image-post-profile {
+  height: 500px;
+  width: 550px;
+}

@@ -294,8 +294,8 @@ class Home extends Component {
                                         </Typography>
                                         <Typography variant="body2" className="hash-tag">
                                             {data.tags != null && data.tags.map(tag => (
-                                                <span className="tag-space" key={tag}>
-                                                    #{tag}
+                                                <span key={tag}>
+                                                    #{tag}  &nbsp;
                                                 </span>
 
                                             ))}
