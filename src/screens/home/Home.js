@@ -285,7 +285,7 @@ class Home extends Component {
                                             </Avatar>
                                         }
                                         title={data.user.username}
-                                        subheader={new Date(data.created_time).toDateString()} />
+                                        subheader={("0" + new Date(data.created_time * 1000).getDate()).slice(-2) + '/' + ("0" + new Date(data.created_time * 1000).getMonth()).slice(-2) + '/' + new Date(data.created_time * 1000).getFullYear() + " " + ("0" + new Date(data.created_time * 1000).getHours()).slice(-2) + ':' + ("0" + new Date(data.created_time * 1000).getMinutes()).slice(-2) + ':' + ("0" + new Date(data.created_time * 1000).getSeconds()).slice(-2)} />
                                     <CardContent>
                                         <img src={data.images.standard_resolution.url} width="640" alt={data.caption.text.split("#")[0]} />
                                         <hr />
