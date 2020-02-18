@@ -10,8 +10,9 @@ import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 
-//https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784
-
+//dummy password and username is upgrad
+//to login in application please login with:
+// upgrad as username and upgrade as password
 class Login extends Component {
 
     constructor() {
@@ -28,14 +29,21 @@ class Login extends Component {
         }
     }
 
+    //this is called on change of username
     inputUsernameChangeHandler = (e) => {
         this.setState({ usernameTyped: e.target.value });
     }
 
+    //this method is called on click of password
     inputPasswordChangeHandler = (e) => {
         this.setState({ passwordTyped: e.target.value });
     }
 
+    //this method is called on click of login button
+    //this will set the acces Token in the sesson storage
+    //For checking the username and password are correct they are check
+    //against the dummy password and username
+    //this will route the page to Home page
     loginClickHandler = () => {
         this.state.usernameTyped === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
         this.state.passwordTyped === "" ? this.setState({ passwordRequired: "dispBlock" }) : this.setState({ passwordRequired: "dispNone" });
@@ -71,7 +79,7 @@ class Login extends Component {
                             <InputLabel htmlFor="username">Username</InputLabel>
                             <Input id="username" type="text" username={this.state.usernameTyped} onChange={this.inputUsernameChangeHandler} />
                             <FormHelperText className={this.state.usernameRequired} >
-                                <span className="red"><Typography variant="subtitle1">required</Typography></span>
+                                <span className="red">required</span>
                             </FormHelperText>
                         </FormControl>
                         <br /><br />
@@ -79,18 +87,18 @@ class Login extends Component {
                             <InputLabel htmlFor="password">Password</InputLabel>
                             <Input id="password" type="password" password={this.state.passwordTyped} onChange={this.inputPasswordChangeHandler} />
                             <FormHelperText className={this.state.passwordRequired}>
-                                <span className="red"><Typography variant="subtitle1">required</Typography></span>
+                                <span className="red">required</span>
                             </FormHelperText>
                         </FormControl>
                         <br /><br />
                         <FormControl>
                             <FormHelperText className={this.state.loginFailed}>
-                                <span className="red"><Typography variant="subtitle1">Incorrect username and/or password</Typography></span>
+                                <span className="red">Incorrect username and/or password</span>
                                 <br />
                             </FormHelperText>
                         </FormControl>
                         <br />
-                        <Button variant="contained" color="primary" onClick={this.loginClickHandler}><Typography variant="subtitle1">LOGIN</Typography></Button>
+                        <Button variant="contained" color="primary" onClick={this.loginClickHandler}><span className="login-button">LOGIN</span></Button>
                         <br /><br /><br />
                     </CardContent>
                 </Card>

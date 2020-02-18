@@ -30,9 +30,9 @@ class Home extends Component {
         this.state = {
             data: [],
             postData: [],
-            postData2: [],
             like: [],
             liked: [],
+            noOfLikes: [],
             isCommentAdded: [],
             commentAdded: [],
             comment: [],
@@ -54,7 +54,6 @@ class Home extends Component {
                 that.setState({
                     data: JSON.parse(this.response).data
                 });
-                console.log("checking user data" + JSON.stringify(that.state.data))
             }
         });
         xhrData.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
@@ -66,8 +65,7 @@ class Home extends Component {
         xhrPostData.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    postData: JSON.parse(this.responseText),
-                    postData2: JSON.parse(this.responseText)
+                    postData: JSON.parse(this.responseText)
                 })
                 let length = that.state.postData.data.length;
                 let initialLike = []
@@ -76,6 +74,7 @@ class Home extends Component {
                 let commentInitial = []
                 let commentRequiredInitial = []
                 let commentAddedInitial = []
+                let noOfLikesInitial = [];
                 for (var i = 0; i < length; i++) {
                     initialLike.push("dispBlock");
                     initialLiked.push("dispNone");
@@ -83,6 +82,7 @@ class Home extends Component {
                     commentInitial.push('');
                     commentRequiredInitial.push("dispNone")
                     commentAddedInitial.push('');
+                    noOfLikesInitial[i] = that.state.postData.data[i].likes.count;
                 }
                 that.setState({
                     like: initialLike
@@ -106,8 +106,9 @@ class Home extends Component {
                 that.setState({
                     postDataSearch: postData
                 })
-                console.log("checking post data" + JSON.stringify(that.state.postData.data[0].user.id))
-                console.log("checking post data" + JSON.stringify(that.state.postData))
+                that.setState({
+                    noOfLikes: noOfLikesInitial
+                })
             }
         })
         xhrPostData.open("GET", "https://api.instagram.com/v1/users/self/media/recent?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
@@ -115,6 +116,9 @@ class Home extends Component {
 
     }
 
+    //this method is called when search is made
+    //in this we are trying to search a post that contains the same caption
+    // as that typed is search box
     searchChangeHandler = (e) => {
         if (e !== "") {
             let searchPosts = this.state.postData;
@@ -122,68 +126,133 @@ class Home extends Component {
             let indSearchPostsResults = indSearchPosts.filter(indSearchPost => indSearchPost.caption.text.includes(e))
             searchPosts.data = indSearchPostsResults;
             this.setState({ postData: searchPosts });
-        } else {
+        }
+        else {
             this.componentWillMount();
         }
     }
 
+    //this method is called on click of like button
+    //this will make the liked button visible
+    //this will increase the no of likes by 1
     likeClickHandler = (index) => {
-        let updatedPostData = this.state.postData;
-        updatedPostData.data[index].likes.count = updatedPostData.data[index].likes.count + 1;
-        this.setState({ postData: updatedPostData });
-        let updateLiked = this.state.liked;
-        updateLiked[index] = "dispBlock";
-        this.setState({ liked: updateLiked })
-        let updateLike = this.state.like;
-        updateLike[index] = "dispNone";
-        this.setState({ like: updateLike });
 
+        let likeEdit = [];
+        let likedEdit = [];
+        let noOfLikesEdit = [];
+
+        let len = this.state.postData.data.length;
+        for (var j = 0; j < len; j++) {
+            likeEdit[j] = this.state.like[j];
+            likedEdit[j] = this.state.liked[j];
+            noOfLikesEdit[j] = this.state.noOfLikes[j];
+        }
+        likeEdit[index] = 'dispNone';
+        likedEdit[index] = 'dispBlock';
+        noOfLikesEdit[index] = noOfLikesEdit[index] + 1;
+        this.setState({
+            like: likeEdit
+        })
+        this.setState({
+            liked: likedEdit
+        })
+        this.setState({
+            noOfLikes: noOfLikesEdit
+        })
     }
 
+    //this will be called when the red colored liked button is clicked
+    //this will make the bordered like button visible
+    //this will make the count of likes to default
     unlikeClickHandler = (index) => {
-        let updatedPostData = this.state.postData;
-        updatedPostData.data[index].likes.count = updatedPostData.data[index].likes.count - 1;
-        this.setState({ postData: updatedPostData });
-        let updateLike = this.state.like;
-        updateLike[index] = "dispBlock";
-        this.setState({ like: updateLike });
-        let updateLiked = this.state.liked;
-        updateLiked[index] = "dispNone";
-        this.setState({ liked: updateLiked })
+
+        let likeEdit = [];
+        let likedEdit = [];
+        let noOfLikesEdit = [];
+
+        let len = this.state.postData.data.length;
+        for (var j = 0; j < len; j++) {
+            likeEdit[j] = this.state.like[j];
+            likedEdit[j] = this.state.liked[j];
+            noOfLikesEdit[j] = this.state.noOfLikes[j];
+        }
+        likeEdit[index] = 'dispBlock';
+        likedEdit[index] = 'dispNone';
+        noOfLikesEdit[index] = noOfLikesEdit[index] - 1;
+        this.setState({
+            like: likeEdit
+        })
+        this.setState({
+            liked: likedEdit
+        })
+        this.setState({
+            noOfLikes: noOfLikesEdit
+        })
     }
 
-    inputCommentChangeHandler = (e, index) => {
-        let commentAddedUpdate = this.state.commentAdded;
-        commentAddedUpdate[index] = e;
-        this.setState({ commentAdded: commentAddedUpdate });
+    //this method is called on when comment that is added is changed
+    inputCommentChangeHandler = (value, index) => {
+
+        let commentAddedUpdate = [];
+        let len = this.state.postData.data.length;
+        for (var k = 0; k < len; k++) {
+            commentAddedUpdate[k] = this.state.comment[k]
+        }
+        commentAddedUpdate[index] = value;
+        this.setState({
+            commentAdded: commentAddedUpdate
+        })
     }
 
+    //this method is called when Add Comment button is clicked
     addCommentClickHandler = (index) => {
-        console.log("add commenthandler called for :" + index)
-        if (this.state.commentAdded[index] === '' || this.state.commentAdded[index] === null) {
-            let commentRequiredUpdate = this.state.commentRequired;
-            commentRequiredUpdate[index] = "dispBlock";
-            this.setState({ commentRequired: commentRequiredUpdate });
+
+        let commentRequiredEdit = [];
+        let CommentEdit = [];
+        let isCommentAddedEdit = [];
+        let len = this.state.postData.data.length;
+        for (var l = 0; l < len; l++) {
+            commentRequiredEdit[l] = "dispNone";
+            CommentEdit[l] = this.state.comment[l];
+            isCommentAddedEdit[l] = this.state.isCommentAdded[l];
         }
-        else {
-            //let length = this.state.postData.data.length;
-            let commentRequiredUpdate = this.state.commentRequired;
-            let isCommentAddedUpdate = this.state.isCommentAdded;
-            let commentUpdate = this.state.commentAdded;
-            //let commentAddedUpdate = this.state.commentAdded;
-            commentRequiredUpdate[index] = "dispNone";
-            isCommentAddedUpdate[index] = "dispBlock"
-            this.setState({ commentRequired: commentRequiredUpdate });
-            this.setState({ isCommentAdded: isCommentAddedUpdate });
-            this.setState({ comment: commentUpdate })
-            // for (var i = 0; i < length; i++) {
-            //     commentAddedUpdate.push('');
-            // }
-            // this.setState({ commentAdded: commentAddedUpdate });
+        let id = "comment" + index;
+        if (this.state.commentAdded[index] !== '') {
+            isCommentAddedEdit[index] = "dispNone";
+            CommentEdit[index] = this.state.commentAdded[index];
+            this.setState({
+                isCommentAddedEdit: isCommentAddedEdit
+            })
+            this.setState({
+                comment: CommentEdit
+            })
+            isCommentAddedEdit[index] = "dispBlock";
+            this.setState({
+                isCommentAdded: isCommentAddedEdit
+            })
+            commentRequiredEdit[index] = "dispNone"
+            this.setState({
+                commentRequired: commentRequiredEdit
+            })
+        } else {
+            commentRequiredEdit[index] = "dispBlock"
+            this.setState({
+                commentRequired: commentRequiredEdit
+            })
         }
+        let commentAddedDefault = [];
+        for (var m = 0; m < len; m++) {
+            commentAddedDefault[m] = ''
+        }
+        this.setState({
+            commentAdded: commentAddedDefault
+        })
+        document.getElementById(id).value = '';
 
     }
 
+    //this method is clicked on click of the profile pic on the header
+    //this method will open the Menu List
     profileClickHandler = (event) => {
         if (this.state.dispMenu === "dispNone") {
             this.setState({ dispMenu: "dispBlock" })
@@ -202,6 +271,9 @@ class Home extends Component {
         }
     }
 
+    //this method is clicked when logout is clicked from Menu
+    //this will remove the item with key equals to "access-token"
+    //and will redirect the controll to login page
     logoutClickHandler = (event) => {
         if (this.state.open === true) {
             this.setState({ open: false })
@@ -219,6 +291,8 @@ class Home extends Component {
         })
     }
 
+    //this method is called when the My Account is clicked from Menu
+    //this will route the control the profile page
     myAccountClickHandler = (event) => {
         if (this.state.open === true) {
             this.setState({ open: false })
@@ -285,7 +359,7 @@ class Home extends Component {
                                             </Avatar>
                                         }
                                         title={data.user.username}
-                                        subheader={new Date(data.created_time).toDateString()} />
+                                        subheader={("0" + new Date(data.created_time * 1000).getDate()).slice(-2) + '/' + ("0" + new Date(data.created_time * 1000).getMonth()).slice(-2) + '/' + new Date(data.created_time * 1000).getFullYear() + " " + ("0" + new Date(data.created_time * 1000).getHours()).slice(-2) + ':' + ("0" + new Date(data.created_time * 1000).getMinutes()).slice(-2) + ':' + ("0" + new Date(data.created_time * 1000).getSeconds()).slice(-2)} />
                                     <CardContent>
                                         <img src={data.images.standard_resolution.url} width="640" alt={data.caption.text.split("#")[0]} />
                                         <hr />
@@ -308,7 +382,7 @@ class Home extends Component {
                                             <span className={this.state.liked[index]}>
                                                 <FavoriteIcon style={{ color: "red" }} id={"liked" + data.caption.id} onClick={() => this.unlikeClickHandler(index)} />
                                             </span>
-                                            <span className="like-count">{data.likes.count} likes</span>
+                                            <span className="like-count">{this.state.noOfLikes[index]} likes</span>
                                         </div>
                                         <br />
                                         <div className={this.state.isCommentAdded[index]}>

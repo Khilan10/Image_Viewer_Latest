@@ -69,7 +69,6 @@ class Profile extends Component {
                 that.setState({
                     loggedInUserData: JSON.parse(this.responseText).data
                 });
-                console.log("checking state" + that.state.loggedInUserData);
                 that.setState({
                     numberOfPosts: that.state.loggedInUserData.counts.media
                 })
@@ -96,7 +95,6 @@ class Profile extends Component {
                     postData: JSON.parse(this.responseText)
                 })
                 let length = that.state.postData.data.length
-                console.log("lenght:" + length);
                 let imageClickedUrlModalInitial = [];
                 let profilePictureModalInitial = [];
                 let usernameModalInitial = [];
@@ -164,6 +162,8 @@ class Profile extends Component {
 
     }
 
+    //this method will be called when profile pic on  the header is clicked
+    //this will display the menu with Logout as the Menu Item
     profileClickHandler = (event) => {
         if (this.state.dispMenu === "dispNone") {
             this.setState({ dispMenu: "dispBlock" })
@@ -182,6 +182,9 @@ class Profile extends Component {
         }
     }
 
+    //this method is clicked when logout is clicked from Menu
+    //this will remove the item with key equals to "access-token"
+    //and will redirect the controll to login page
     logoutClickHandler = (event) => {
         if (this.state.open === true) {
             this.setState({ open: false })
@@ -199,12 +202,15 @@ class Profile extends Component {
         })
     }
 
+    //this method is called when Image Viewer Logo is clicked
+    //this will route the page to the home page
     logoClickHandler = () => {
         this.props.history.push({
             pathname: '/home/'
         })
     }
 
+    //this method is called to open a modal to edit the full name of the user
     openEditModalHandler = () => {
         if (this.state.openModal === true) {
             this.setState({ openModal: false })
@@ -213,6 +219,7 @@ class Profile extends Component {
         }
     }
 
+    //this method is called to close a modal to edit the full name of the user
     closeEditModalHandler = () => {
         if (this.state.openModal === true) {
             this.setState({ openModal: false })
@@ -220,14 +227,15 @@ class Profile extends Component {
         this.setState({ requiredUsername: 'dispNone' })
     }
 
+    //this method is called on change of full Name input 
     inputFullNameChangeHandler = (event) => {
         let NameEdit = event.target.value
         this.setState({ fullNameEdit: NameEdit })
     }
 
+    //this method is called on click of edit button
     updateClickHandler = () => {
         let NameEdit = this.state.fullNameEdit;
-        console.log("checking full name edit:" + NameEdit);
         if (NameEdit !== '') {
             this.setState({ fullName: NameEdit })
             this.setState({ requiredUsername: 'dispNone' })
@@ -239,14 +247,15 @@ class Profile extends Component {
         }
     }
 
+    //this method is called on click of image on a grid
+    //this will set the state of indexOfPostClickedModal
+    //with the value of index passed on click
     openPostModal = (index) => {
         this.setState({ indexOfPostClickedModal: index });
         this.setState({ imageOpen: true });
-        console.log("index:" + index);
-        console.log("checking index:" + this.state.indexOfPostClickedModal);
-        console.log("image url" + this.state.imageClickedUrlModal[this.state.indexOfPostClickedModal]);
     }
 
+    //this method is used to close the modal that click of image only grid
     closePostModal = () => {
         this.setState({ imageOpen: false });
         let commentRequiredModalClose = [];
@@ -257,6 +266,9 @@ class Profile extends Component {
         this.setState({ commentRequiredModal: commentRequiredModalClose })
     }
 
+    //this method is called on click of like button
+    //this will make the liked button visible
+    //this will increase the no of likes by 1
     likeClickModalHandler = (index) => {
         let likeModalEdit = [];
         let likedModalEdit = [];
@@ -282,6 +294,9 @@ class Profile extends Component {
         })
     }
 
+    //this will be called when the red colored liked button is clicked
+    //this will make the bordered like button visible
+    //this will make the count of likes to default
     unlikeClickModalHandler = (index) => {
         let likeModalEdit = [];
         let likedModalEdit = [];
@@ -307,6 +322,7 @@ class Profile extends Component {
         })
     }
 
+    //this method is called on when comment that is added is changed
     inputCommentModalChangeHandler = (value, index) => {
         let userCommentModalCopyEdit = [];
         let len = this.state.postData.data.length;
@@ -319,6 +335,7 @@ class Profile extends Component {
         })
     }
 
+    //this method is called when Add Comment button is clicked
     addCommentModalClickHandler = (index) => {
         let commentRequiredModalEdit = [];
         let userCommentModalEdit = [];
@@ -329,7 +346,6 @@ class Profile extends Component {
             userCommentModalEdit[l] = this.state.userCommentModal[l];
             displayUserCommentModalEdit[l] = this.state.displayUserCommentModal[l];
         }
-        console.log("checking added value:" + this.state.userCommentModalCopy[index]);
         if (this.state.userCommentModalCopy[index] !== '') {
             commentRequiredModalEdit[index] = "dispNone";
             userCommentModalEdit[index] = this.state.userCommentModalCopy[index];
@@ -343,24 +359,12 @@ class Profile extends Component {
             this.setState({
                 displayUserCommentModal: displayUserCommentModalEdit
             })
-            console.log("checing user comment array" + this.state.userCommentModal[index]);
         } else {
             commentRequiredModalEdit[index] = "dispBlock"
             this.setState({
                 commentRequiredModal: commentRequiredModalEdit
             })
         }
-        // if (this.state.userCommentModal[index] !== '') {
-        //     displayUserCommentModalEdit[index] = "dispBlock";
-        //     this.setState({
-        //         displayUserCommentModal: displayUserCommentModalEdit
-        //     })
-        // } else {
-        //     displayUserCommentModalEdit[index] = "dispNone";
-        //     this.setState({
-        //         displayUserCommentModal: displayUserCommentModalEdit
-        //     })
-        // }
         let userCommentModalCopyDefault = [];
         for (var m = 0; m < len; m++) {
             userCommentModalCopyDefault[m] = ''
