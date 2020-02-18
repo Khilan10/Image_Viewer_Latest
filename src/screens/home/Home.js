@@ -230,6 +230,10 @@ class Home extends Component {
             this.setState({
                 isCommentAdded: isCommentAddedEdit
             })
+            commentRequiredEdit[index] = "dispNone"
+            this.setState({
+                commentRequired: commentRequiredEdit
+            })
         } else {
             commentRequiredEdit[index] = "dispBlock"
             this.setState({
