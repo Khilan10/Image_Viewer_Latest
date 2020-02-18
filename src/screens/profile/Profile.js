@@ -19,7 +19,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 class Profile extends Component {
 
@@ -37,7 +40,22 @@ class Profile extends Component {
             requiredUsername: 'dispNone',
             fullName: '',
             fullNameEdit: '',
-            postData: []
+            postData: [],
+            imageOpen: false,
+            imageClickedUrlModal: [],
+            profilePictureModal: [],
+            usernameModal: [],
+            captionModal: [],
+            tagModal: [],
+            userCommentModal: [],
+            displayUserCommentModal: [],
+            userCommentModalCopy: [],
+            commentRequiredModal: [],
+            NoOfLikesModal: [],
+            indexOfPostClickedModal: 0,
+            likeModal: [],
+            likedModal: []
+
         }
     }
 
@@ -76,6 +94,68 @@ class Profile extends Component {
             if (this.readyState === 4) {
                 that.setState({
                     postData: JSON.parse(this.responseText)
+                })
+                let length = that.state.postData.data.length
+                console.log("lenght:" + length);
+                let imageClickedUrlModalInitial = [];
+                let profilePictureModalInitial = [];
+                let usernameModalInitial = [];
+                let captionModalInitial = [];
+                let tagModalInitial = [];
+                let likeModalInitial = [];
+                let likedModlaInitial = [];
+                let NoOfLikesModalInitial = [];
+                let userCommentModalInitial = [];
+                let commentRequiredModalInitial = [];
+                let userCommentModalCopyInitial = [];
+                let displayUserCommentModalInitial = [];
+
+                for (var i = 0; i < length; i++) {
+                    imageClickedUrlModalInitial[i] = that.state.postData.data[i].images.standard_resolution.url;
+                    profilePictureModalInitial[i] = that.state.postData.data[i].user.profile_picture;
+                    usernameModalInitial[i] = that.state.postData.data[i].user.username;
+                    captionModalInitial[i] = that.state.postData.data[i].caption.text.split('#')[0];
+                    tagModalInitial[i] = that.state.postData.data[i].tags;
+                    likeModalInitial[i] = "dispBlock";
+                    likedModlaInitial[i] = "dispNone";
+                    NoOfLikesModalInitial[i] = that.state.postData.data[i].likes.count;
+                    userCommentModalInitial[i] = '';
+                    commentRequiredModalInitial[i] = "dispNone";
+                    userCommentModalCopyInitial[i] = ''
+                    displayUserCommentModalInitial[i] = "dispNone";
+                }
+
+                that.setState({ imageClickedUrlModal: imageClickedUrlModalInitial })
+                that.setState({ profilePictureModal: profilePictureModalInitial })
+                that.setState({
+                    usernameModal: usernameModalInitial
+                })
+                that.setState({
+                    captionModal: captionModalInitial
+                })
+                that.setState({
+                    tagModal: tagModalInitial
+                })
+                that.setState({
+                    likeModal: likeModalInitial
+                })
+                that.setState({
+                    likedModal: likedModlaInitial
+                })
+                that.setState({
+                    NoOfLikesModal: NoOfLikesModalInitial
+                })
+                that.setState({
+                    userCommentModal: userCommentModalInitial
+                })
+                that.setState({
+                    commentRequiredModal: commentRequiredModalInitial
+                })
+                that.setState({
+                    userCommentModalCopy: userCommentModalCopyInitial
+                })
+                that.setState({
+                    displayUserCommentModal: displayUserCommentModalInitial
                 })
             }
         })
@@ -159,6 +239,140 @@ class Profile extends Component {
         }
     }
 
+    openPostModal = (index) => {
+        this.setState({ indexOfPostClickedModal: index });
+        this.setState({ imageOpen: true });
+        console.log("index:" + index);
+        console.log("checking index:" + this.state.indexOfPostClickedModal);
+        console.log("image url" + this.state.imageClickedUrlModal[this.state.indexOfPostClickedModal]);
+    }
+
+    closePostModal = () => {
+        this.setState({ imageOpen: false });
+        let commentRequiredModalClose = [];
+        let len = this.state.postData.data.length;
+        for (var p = 0; p < len; p++) {
+            commentRequiredModalClose[p] = "dispNone";
+        }
+        this.setState({ commentRequiredModal: commentRequiredModalClose })
+    }
+
+    likeClickModalHandler = (index) => {
+        let likeModalEdit = [];
+        let likedModalEdit = [];
+        let NoOfLikesModalEdit = [];
+
+        let len = this.state.postData.data.length;
+        for (var j = 0; j < len; j++) {
+            likeModalEdit[j] = this.state.likeModal[j];
+            likedModalEdit[j] = this.state.likedModal[j];
+            NoOfLikesModalEdit[j] = this.state.NoOfLikesModal[j];
+        }
+        likeModalEdit[index] = 'dispNone';
+        likedModalEdit[index] = 'dispBlock';
+        NoOfLikesModalEdit[index] = NoOfLikesModalEdit[index] + 1;
+        this.setState({
+            likeModal: likeModalEdit
+        })
+        this.setState({
+            likedModal: likedModalEdit
+        })
+        this.setState({
+            NoOfLikesModal: NoOfLikesModalEdit
+        })
+    }
+
+    unlikeClickModalHandler = (index) => {
+        let likeModalEdit = [];
+        let likedModalEdit = [];
+        let NoOfLikesModalEdit = [];
+
+        let len = this.state.postData.data.length;
+        for (var j = 0; j < len; j++) {
+            likeModalEdit[j] = this.state.likeModal[j];
+            likedModalEdit[j] = this.state.likedModal[j];
+            NoOfLikesModalEdit[j] = this.state.NoOfLikesModal[j];
+        }
+        likeModalEdit[index] = 'dispBlock';
+        likedModalEdit[index] = 'dispNone';
+        NoOfLikesModalEdit[index] = NoOfLikesModalEdit[index] - 1;
+        this.setState({
+            likeModal: likeModalEdit
+        })
+        this.setState({
+            likedModal: likedModalEdit
+        })
+        this.setState({
+            NoOfLikesModal: NoOfLikesModalEdit
+        })
+    }
+
+    inputCommentModalChangeHandler = (value, index) => {
+        let userCommentModalCopyEdit = [];
+        let len = this.state.postData.data.length;
+        for (var k = 0; k < len; k++) {
+            userCommentModalCopyEdit[k] = this.state.userCommentModalCopy[k]
+        }
+        userCommentModalCopyEdit[index] = value;
+        this.setState({
+            userCommentModalCopy: userCommentModalCopyEdit
+        })
+    }
+
+    addCommentModalClickHandler = (index) => {
+        let commentRequiredModalEdit = [];
+        let userCommentModalEdit = [];
+        let displayUserCommentModalEdit = [];
+        let len = this.state.postData.data.length;
+        for (var l = 0; l < len; l++) {
+            commentRequiredModalEdit[l] = "dispNone";
+            userCommentModalEdit[l] = this.state.userCommentModal[l];
+            displayUserCommentModalEdit[l] = this.state.displayUserCommentModal[l];
+        }
+        console.log("checking added value:" + this.state.userCommentModalCopy[index]);
+        if (this.state.userCommentModalCopy[index] !== '') {
+            commentRequiredModalEdit[index] = "dispNone";
+            userCommentModalEdit[index] = this.state.userCommentModalCopy[index];
+            this.setState({
+                userCommentModal: userCommentModalEdit
+            })
+            this.setState({
+                commentRequiredModal: commentRequiredModalEdit
+            })
+            displayUserCommentModalEdit[index] = "dispBlock";
+            this.setState({
+                displayUserCommentModal: displayUserCommentModalEdit
+            })
+            console.log("checing user comment array" + this.state.userCommentModal[index]);
+        } else {
+            commentRequiredModalEdit[index] = "dispBlock"
+            this.setState({
+                commentRequiredModal: commentRequiredModalEdit
+            })
+        }
+        // if (this.state.userCommentModal[index] !== '') {
+        //     displayUserCommentModalEdit[index] = "dispBlock";
+        //     this.setState({
+        //         displayUserCommentModal: displayUserCommentModalEdit
+        //     })
+        // } else {
+        //     displayUserCommentModalEdit[index] = "dispNone";
+        //     this.setState({
+        //         displayUserCommentModal: displayUserCommentModalEdit
+        //     })
+        // }
+        let userCommentModalCopyDefault = [];
+        for (var m = 0; m < len; m++) {
+            userCommentModalCopyDefault[m] = ''
+        }
+        this.setState({
+            userCommentModalCopy: userCommentModalCopyDefault
+        })
+        let id = "comment" + this.state.indexOfPostClickedModal;
+        document.getElementById(id).value = '';
+
+    }
+
 
     render() {
         let pdata = this.state.postData;
@@ -212,38 +426,96 @@ class Profile extends Component {
                     </div>
                 </div>
                 <div>
-                    <Modal open={this.state.openModal} className="edit-modal" paperprops={{ tabIndex: -1 }} >
-                        <ClickAwayListener onClickAway={() => { this.closeEditModalHandler() }} >
-                            <Card tabIndex={-1}>
-                                <CardContent>
-                                    <FormControl>
-                                        <Typography variant="h4">EDIT</Typography>
-                                    </FormControl>
-                                    <br /><br /><br />
-                                    <FormControl fullWidth required>
-                                        <InputLabel htmlFor="fullnameEdit">Full Name</InputLabel>
-                                        <Input id="fullnameEdit" type="test" onChange={this.inputFullNameChangeHandler} name="fufullnameEdit" />
-                                        <FormHelperText className={this.state.requiredUsername}>
-                                            <span className="red">required</span>
-                                        </FormHelperText>
-                                    </FormControl>
-                                    <br /><br />
-                                    <Button variant="contained" color="primary" onClick={this.updateClickHandler}>Update</Button>
-                                    <br /><br />
-                                </CardContent>
-                            </Card>
-                        </ClickAwayListener>
+                    <Modal open={this.state.openModal} className="edit-modal" onClose={this.closeEditModalHandler}>
+                        <Card >
+                            <CardContent>
+                                <FormControl>
+                                    <Typography variant="h4">EDIT</Typography>
+                                </FormControl>
+                                <br /><br /><br />
+                                <FormControl fullWidth required>
+                                    <InputLabel htmlFor="fullnameEdit">Full Name</InputLabel>
+                                    <Input id={"fullnameEdit" + this.state.indexOfPostClickedModal} type="test" onChange={this.inputFullNameChangeHandler} name="fufullnameEdit" />
+                                    <FormHelperText className={this.state.requiredUsername}>
+                                        <span className="red">required</span>
+                                    </FormHelperText>
+                                </FormControl>
+                                <br /><br />
+                                <Button variant="contained" color="primary" onClick={this.updateClickHandler}>Update</Button>
+                                <br /><br />
+                            </CardContent>
+                        </Card>
                     </Modal>
                 </div>
                 <div className="image-post">
                     <GridList cellHeight={300} cols={3}>
-                        {pdata.data != null && pdata.data.map((tile) => (
+                        {pdata.data != null && pdata.data.map((tile, index) => (
                             <GridListTile key={tile.caption.id} cols={tile.cols || 1}>
-                                <img src={tile.images.standard_resolution.url} alt={tile.caption.id} />
+                                <img src={tile.images.standard_resolution.url} alt={tile.caption.id} onClick={() => (this.openPostModal(index))} />
                             </GridListTile>
                         ))}
                     </GridList>
                 </div>
+                <Modal className="image-open" open={this.state.imageOpen}
+                    aria-labelledby="post-card-header-profile" aria-describedby="post-card-content-profile" onClose={this.closePostModal}>
+                    <Card className="post-card-profile">
+                        <CardHeader id="post-card-header-profile" />
+                        <CardContent id="post-card-content-profile" className="post-card-content-profile">
+                            <div className="post-content-left-profile">
+                                <img src={this.state.imageClickedUrlModal[this.state.indexOfPostClickedModal]} alt={this.state.usernameModal[this.state.indexOfPostClickedModal]} className="image-post-profile" />
+                            </div>
+                            <div className="post-content-right-profile">
+                                <div className="post-content-right-profile-header">
+                                    <Avatar src={this.state.profilePictureModal[this.state.indexOfPostClickedModal]} className="avtar-profile">
+                                    </Avatar>
+                                    <Typography variant="h6">{this.state.usernameModal[this.state.indexOfPostClickedModal]}</Typography>
+                                </div>
+                                <div className="hr-profile">
+                                    <hr />
+                                </div>
+                                <div>
+                                    <Typography variant="h6">{this.state.captionModal[this.state.indexOfPostClickedModal]}</Typography>
+                                </div>
+                                <div>
+                                    {this.state.tagModal[this.state.indexOfPostClickedModal] != null && this.state.tagModal[this.state.indexOfPostClickedModal].map(tag => (
+                                        <span className="tag-space-profile" key={"profile" + tag}>
+                                            #{tag} &nbsp;
+                                        </span>
+
+                                    ))}
+                                </div>
+                                <div className={this.state.displayUserCommentModal[this.state.indexOfPostClickedModal]}>
+                                    <Typography variant='h6'><span className="bold">{this.state.loggedInUserData.username}:</span>{this.state.userCommentModal[this.state.indexOfPostClickedModal]}</Typography>
+                                </div>
+                                <div className="like-profile">
+                                    <span className={this.state.likeModal[this.state.indexOfPostClickedModal]}>
+                                        <FavoriteBorderIcon id={"notlikePost" + this.state.indexOfPostClickedModal} onClick={() => this.likeClickModalHandler(this.state.indexOfPostClickedModal)} />
+                                    </span>
+                                    <span className={this.state.likedModal[this.state.indexOfPostClickedModal]}>
+                                        <FavoriteIcon style={{ color: "red" }} id={"likedPost" + this.state.indexOfPostClickedModal} onClick={() => this.unlikeClickModalHandler(this.state.indexOfPostClickedModal)} />
+                                    </span>
+                                    <span className="like-count">{this.state.NoOfLikesModal[this.state.indexOfPostClickedModal]} likes</span>
+                                </div>
+                                <div className="form-control-modal">
+                                    <span>
+                                        <FormControl>
+                                            <InputLabel htmlFor="comment" className="lable">Add a comment</InputLabel>
+                                            <Input id={"comment" + this.state.indexOfPostClickedModal}
+                                                type="" className="lable" onChange={(e) => this.inputCommentModalChangeHandler(e.target.value, this.state.indexOfPostClickedModal)} />
+                                            <FormHelperText className={this.state.commentRequiredModal[this.state.indexOfPostClickedModal]}>
+                                                <span className="red">Please add a comment</span>
+                                                <br />
+                                            </FormHelperText>
+                                        </FormControl>
+                                        <FormControl>
+                                            <Button variant="contained" color="primary"><Typography variant="subtitle1" onClick={() => this.addCommentModalClickHandler(this.state.indexOfPostClickedModal)}>ADD</Typography></Button>
+                                        </FormControl>
+                                    </span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </Modal>
             </div >
 
         )

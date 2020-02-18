@@ -53,6 +53,56 @@
 }
 .image-post {
   margin-top: 40px;
-  margin-right: 10%;
-  margin-left: 10%;
+  margin-right: 8%;
+  margin-left: 8%;
+}
+.image-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.post-card-content-profile {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  padding: 20px;
+}
+.post-content-right-profile {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.post-card-profile {
+  display: flex;
+}
+.post-content-right-profile-header {
+  display: flex;
+  flex-direction: row;
+}
+.avtar-profile {
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.tag-space-profile {
+  color: #42a5f5;
+}
+.like-profile {
+  display: flex;
+  flex-direction: row;
+  margin-top: 360px;
+}
+.form-control-modal {
+  display: flex;
+  flex-direction: row;
+}
+.form-control-modal-column {
+  display: flex;
+  flex-direction: column;
+}
+.bold {
+  font-weight: bolder;
+}
+.image-post-profile {
+  height: 500px;
+  width: 550px;
 }
