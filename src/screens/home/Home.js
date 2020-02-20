@@ -39,7 +39,8 @@ class Home extends Component {
             commentRequired: [],
             dispMenu: 'dispNone',
             open: false,
-            anchorEl: null
+            anchorEl: null,
+            search: ''
         }
     }
 
@@ -65,9 +66,9 @@ class Home extends Component {
         xhrPostData.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    postData: JSON.parse(this.responseText)
+                    postData: JSON.parse(this.responseText).data
                 })
-                let length = that.state.postData.data.length;
+                let length = that.state.postData.length;
                 let initialLike = []
                 let initialLiked = []
                 let isCommentAddedInitial = []
@@ -79,10 +80,10 @@ class Home extends Component {
                     initialLike.push("dispBlock");
                     initialLiked.push("dispNone");
                     isCommentAddedInitial.push("dispNone");
-                    commentInitial.push('');
+                    commentInitial.push([]);
                     commentRequiredInitial.push("dispNone")
-                    commentAddedInitial.push('');
-                    noOfLikesInitial[i] = that.state.postData.data[i].likes.count;
+                    commentAddedInitial[i] = '';
+                    noOfLikesInitial[i] = that.state.postData[i].likes.count;
                 }
                 that.setState({
                     like: initialLike
@@ -117,19 +118,8 @@ class Home extends Component {
     }
 
     //this method is called when search is made
-    //in this we are trying to search a post that contains the same caption
-    // as that typed is search box
     searchChangeHandler = (e) => {
-        if (e !== "") {
-            let searchPosts = this.state.postData;
-            let indSearchPosts = searchPosts.data;
-            let indSearchPostsResults = indSearchPosts.filter(indSearchPost => indSearchPost.caption.text.includes(e))
-            searchPosts.data = indSearchPostsResults;
-            this.setState({ postData: searchPosts });
-        }
-        else {
-            this.componentWillMount();
-        }
+        this.setState({ search: e })
     }
 
     //this method is called on click of like button
@@ -141,7 +131,7 @@ class Home extends Component {
         let likedEdit = [];
         let noOfLikesEdit = [];
 
-        let len = this.state.postData.data.length;
+        let len = this.state.postData.length;
         for (var j = 0; j < len; j++) {
             likeEdit[j] = this.state.like[j];
             likedEdit[j] = this.state.liked[j];
@@ -170,7 +160,7 @@ class Home extends Component {
         let likedEdit = [];
         let noOfLikesEdit = [];
 
-        let len = this.state.postData.data.length;
+        let len = this.state.postData.length;
         for (var j = 0; j < len; j++) {
             likeEdit[j] = this.state.like[j];
             likedEdit[j] = this.state.liked[j];
@@ -194,9 +184,9 @@ class Home extends Component {
     inputCommentChangeHandler = (value, index) => {
 
         let commentAddedUpdate = [];
-        let len = this.state.postData.data.length;
+        let len = this.state.postData.length;
         for (var k = 0; k < len; k++) {
-            commentAddedUpdate[k] = this.state.comment[k]
+            commentAddedUpdate[k] = '';
         }
         commentAddedUpdate[index] = value;
         this.setState({
@@ -210,16 +200,17 @@ class Home extends Component {
         let commentRequiredEdit = [];
         let CommentEdit = [];
         let isCommentAddedEdit = [];
-        let len = this.state.postData.data.length;
+        let len = this.state.postData.length;
         for (var l = 0; l < len; l++) {
             commentRequiredEdit[l] = "dispNone";
             CommentEdit[l] = this.state.comment[l];
             isCommentAddedEdit[l] = this.state.isCommentAdded[l];
         }
         let id = "comment" + index;
-        if (this.state.commentAdded[index] !== '') {
+        if (this.state.commentAdded[index] !== "") {
+            console.log("comment added is:" + this.state.commentAdded[index] + ":comment added is:");
             isCommentAddedEdit[index] = "dispNone";
-            CommentEdit[index] = this.state.commentAdded[index];
+            CommentEdit[index].push(this.state.commentAdded[index]);
             this.setState({
                 isCommentAddedEdit: isCommentAddedEdit
             })
@@ -241,8 +232,8 @@ class Home extends Component {
             })
         }
         let commentAddedDefault = [];
-        for (var m = 0; m < len; m++) {
-            commentAddedDefault[m] = ''
+        for (var p = 0; p < len; p++) {
+            commentAddedDefault[p] = ''
         }
         this.setState({
             commentAdded: commentAddedDefault
@@ -310,7 +301,12 @@ class Home extends Component {
     }
 
     render() {
-        let pdata = this.state.postData;
+        let pdata = this.state.postData.filter(
+            (data) => {
+                return data.caption.text.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
+            }
+        )
+        //let pdata = this.state.postData
         const id = this.state.open ? "simple-popper" : null;
         return (
             <div >
@@ -350,7 +346,7 @@ class Home extends Component {
 
                 <div className="main-content">
                     <GridList cellHeight={"auto"} cols={2}>
-                        {pdata.data != null && pdata.data.map((data, index) => (
+                        {pdata != null && pdata.map((data, index) => (
                             <GridListTile key={"grid" + data.caption.id} >
                                 <Card variant="outlined" className="post-card" key={"card" + data.caption.id}>
                                     <CardHeader
@@ -385,9 +381,14 @@ class Home extends Component {
                                             <span className="like-count">{this.state.noOfLikes[index]} likes</span>
                                         </div>
                                         <br />
+
                                         <div className={this.state.isCommentAdded[index]}>
-                                            <span className="bold">{this.state.data.username} : </span>
-                                            {this.state.comment[index]}
+                                            {this.state.comment[index] != null && this.state.comment[index].map((comment, index) => (
+                                                <div key={"comment individual" + comment + index + data.caption.id}>
+                                                    <span className="bold">{this.state.data.username} : </span>
+                                                    {comment}
+                                                </div>
+                                            ))}
                                         </div>
                                         <br /><br />
                                         <FormControl>

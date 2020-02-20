@@ -117,9 +117,9 @@ class Profile extends Component {
                     likeModalInitial[i] = "dispBlock";
                     likedModlaInitial[i] = "dispNone";
                     NoOfLikesModalInitial[i] = that.state.postData.data[i].likes.count;
-                    userCommentModalInitial[i] = '';
+                    userCommentModalInitial[i] = [];
                     commentRequiredModalInitial[i] = "dispNone";
-                    userCommentModalCopyInitial[i] = ''
+                    userCommentModalCopyInitial[i] = '';
                     displayUserCommentModalInitial[i] = "dispNone";
                 }
 
@@ -348,7 +348,7 @@ class Profile extends Component {
         }
         if (this.state.userCommentModalCopy[index] !== '') {
             commentRequiredModalEdit[index] = "dispNone";
-            userCommentModalEdit[index] = this.state.userCommentModalCopy[index];
+            userCommentModalEdit[index].push(this.state.userCommentModalCopy[index]);
             this.setState({
                 userCommentModal: userCommentModalEdit
             })
@@ -366,9 +366,7 @@ class Profile extends Component {
             })
         }
         let userCommentModalCopyDefault = [];
-        for (var m = 0; m < len; m++) {
-            userCommentModalCopyDefault[m] = ''
-        }
+        userCommentModalCopyDefault[index] = '';
         this.setState({
             userCommentModalCopy: userCommentModalCopyDefault
         })
@@ -430,7 +428,9 @@ class Profile extends Component {
                     </div>
                 </div>
                 <div>
-                    <Modal open={this.state.openModal} className="edit-modal" onClose={this.closeEditModalHandler}>
+                    <Modal open={this.state.openModal} className="edit-modal" onClose={this.closeEditModalHandler}
+                        disableEnforceFocus
+                        disableAutoFocus>
                         <Card >
                             <CardContent>
                                 <FormControl>
@@ -461,7 +461,7 @@ class Profile extends Component {
                     </GridList>
                 </div>
                 <Modal className="image-open" open={this.state.imageOpen}
-                    aria-labelledby="post-card-header-profile" aria-describedby="post-card-content-profile" onClose={this.closePostModal}>
+                    aria-labelledby="post-card-header-profile" aria-describedby="post-card-content-profile" onClose={this.closePostModal} disableAutoFocus disableEnforceFocus>
                     <Card className="post-card-profile">
                         <CardHeader id="post-card-header-profile" />
                         <CardContent id="post-card-content-profile" className="post-card-content-profile">
@@ -489,7 +489,9 @@ class Profile extends Component {
                                     ))}
                                 </div>
                                 <div className={this.state.displayUserCommentModal[this.state.indexOfPostClickedModal]}>
-                                    <Typography variant='h6'><span className="bold">{this.state.loggedInUserData.username}:</span>{this.state.userCommentModal[this.state.indexOfPostClickedModal]}</Typography>
+                                    {this.state.userCommentModal[this.state.indexOfPostClickedModal] != null && this.state.userCommentModal[this.state.indexOfPostClickedModal].map((comment, index) => (
+                                        <Typography variant='h6' key={'comment' + this.state.indexOfPostClickedModal + index}><span className="bold">{this.state.loggedInUserData.username}:</span>{comment}</Typography>
+                                    ))}
                                 </div>
                                 <div className="like-profile">
                                     <span className={this.state.likeModal[this.state.indexOfPostClickedModal]}>
